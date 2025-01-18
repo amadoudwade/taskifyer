@@ -1,19 +1,42 @@
 import mongoose from "mongoose";
 
-const Schema = mongoose.Schema({
-    name: {
+const taskSchema = mongoose.Schema({
+
+    title: {
+        type: String,
+        required: true,
+        unique: true,
+    },
+    description: {
         type: String,
         required: true
     },
-    price: {
-        type: Number,
+    status: {
+        type: String,
+        enum: ["To-do", "In-progress", "Completed", "Overdue"],
+        default: "To-do"
+    },
+    priority: {
+        type: String,
+        enum: ["Low", "Normal", "High", "Urgent"],
+        default: "Normal"
+    },
+    deadline: {
+        type: Date
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    updatedAt: {
+        type: Date,
+        default: Date.now
+    },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
         required: true
     },
-    category: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Category",
-        required: true
-    }
 })
 
-export const Products = mongoose.model("Products", productSchema) 
+export const Tasks = mongoose.model("Tasks", taskSchema) 

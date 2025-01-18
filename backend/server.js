@@ -3,6 +3,7 @@ import express from "express";
 import { config } from "dotenv";
 import bodyParser from "body-parser";
 import AuthRoutes from "./routes/authRoutes.js";
+import taskRoute from "./routes/taskRoutes.js";
 
 const Server = express();
 
@@ -27,4 +28,5 @@ Server.use((req, res, next) => {
 Server.use(express.json())
 Server.use(bodyParser.urlencoded())
 Server.use("/api/auth", AuthRoutes)
+Server.use("/api", taskRoute)
 

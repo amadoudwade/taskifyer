@@ -30,6 +30,10 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 
+import { useFormState } from "react-dom"
+import { logout } from "@/actions/user"
+import Link from "next/link"
+
 export function NavUser({
   user,
 }: {
@@ -40,7 +44,8 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
-
+  const [state, formAction] = useFormState(logout, undefined)
+  
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -102,10 +107,12 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <LogOut />
-              Log out
-            </DropdownMenuItem>
+            <form action={formAction}>
+              <DropdownMenuItem>
+                <LogOut />
+                <button type="submit">Log out</button>
+              </DropdownMenuItem>
+            </form>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>

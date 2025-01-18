@@ -8,7 +8,7 @@ type TaskFormProps = {
 export const TaskForm: React.FC<TaskFormProps> = ({ addTask }) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [priority, setPriority] = useState<'Low' | 'Medium' | 'High'>('Low');
+    const [priority, setPriority] = useState<'Low' | 'Medium' | 'High' >('Low');
   
     const handleSubmit = (e: React.FormEvent) => {
       e.preventDefault();

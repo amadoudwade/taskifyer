@@ -7,7 +7,7 @@ const AuthRoutes = express.Router()
 
 AuthRoutes.post('/register', AddUser)
 AuthRoutes.post('/login', login)
-AuthRoutes.get('/verify/:token', verifyToken)
+AuthRoutes.get('/verify', verifyToken)
 
 
 export default AuthRoutes;

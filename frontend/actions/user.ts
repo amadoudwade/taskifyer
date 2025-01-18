@@ -8,17 +8,13 @@ import { z } from "zod";
 
 
 
-// Schéma de validation avec Zod
-const userSchema = z.object({
-  first_name: z.string().min(1, "Le prénom est requis"),
-  last_name: z.string().min(1, "Le nom est requis"),
-  email: z.string().email("L'adresse e-mail est invalide"),
-  password: z.string().min(6, "Le mot de passe doit contenir au moins 6 caractères"),
-  telephone: z.string().regex(/^\+?[0-9]{7,15}$/, "Le numéro de téléphone est invalide"),
-});
+
 
 export async function login(state: any, formData: FormData){
-
+  const userSchema = z.object({
+    email: z.string().email("L'adresse e-mail est invalide"),
+    password: z.string().min(6, "Le mot de passe doit contenir au moins 6 caractères")
+  });
 try {
     const validatedFields = userSchema.safeParse({
         email: formData.get('email'),
@@ -60,7 +56,17 @@ redirect('/dashboard')
 // Fonction d'enregistrement
 export async function register(state: any, formData: FormData): Promise<void> {
   try {
+
     // Extraction et validation des données avec Zod
+    // Schéma de validation avec Zod
+    const userSchema = z.object({
+      first_name: z.string().min(1, "Le prénom est requis"),
+      last_name: z.string().min(1, "Le nom est requis"),
+      email: z.string().email("L'adresse e-mail est invalide"),
+      password: z.string().min(6, "Le mot de passe doit contenir au moins 6 caractères"),
+      telephone: z.string().regex(/^\+?[0-9]{7,15}$/, "Le numéro de téléphone est invalide"),
+    });
+    
     const data = {
       first_name: formData.get("first_name")?.toString() || "",
       last_name: formData.get("last_name")?.toString() || "",
@@ -101,4 +107,16 @@ export async function register(state: any, formData: FormData): Promise<void> {
   redirect('/auth/login')
 }
 
- 
+export const logout = async (state: any, formdata: FormData) => {
+
+  try {
+      
+      cookies().delete('token')
+
+  } catch (error) {
+      
+      return { type: 'error', message: error }
+  }
+
+  redirect('/auth/login')
+} 

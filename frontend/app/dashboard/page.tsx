@@ -1,57 +1,30 @@
-"use client"
-
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
-import { TaskForm } from '@/components/TaskForm';
-import { TaskList } from '@/components/TaskList';
-import { TaskStats } from '@/components/TaskStats';
-import { Sidebar } from '@/components/ui/sidebar';
-import { AppSidebar } from './_components/app-sidebar';
+import { TASK_URL } from '@/lib/endpoints'
+import axios from 'axios'
+import React from 'react'
+import { columns } from './_components/columns'
+import { DataTable } from './_components/data-table'
+import { verifySession } from '@/lib/auth'
 
 
-const DashboardPage = () => {
-  const [tasks, setTasks] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filteredTasks, setFilteredTasks] = useState([]);
 
-  useEffect(() => {
-    const storedTasks = JSON.parse(localStorage.getItem('tasks') || '[]');
-    setTasks(storedTasks);
-  }, []);
+const DashboardPage = async () => {
 
-  useEffect(() => {
-    setFilteredTasks(
-      tasks.filter((task) =>
-        task.title.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    );
-  }, [tasks, searchQuery]);
+  const user = await verifySession()
 
-  const addTask = (newTask) => {
-    const updatedTasks = [...tasks, newTask];
-    setTasks(updatedTasks);
-    localStorage.setItem('tasks', JSON.stringify(updatedTasks));
-  };
+const tasks = await axios.get(`${TASK_URL}/${user._id}/tasks`)
 
-  const updateTask = (updatedTask) => {
-    const updatedTasks = tasks.map((task) =>
-      task.id === updatedTask.id ? updatedTask : task
-    );
-    setTasks(updatedTasks);
-    localStorage.setItem('tasks', JSON.stringify(updatedTasks));
-  };
 
-  const deleteTask = (taskId) => {
-    const updatedTasks = tasks.filter((task) => task.id !== taskId);
-    setTasks(updatedTasks);
-    localStorage.setItem('tasks', JSON.stringify(updatedTasks));
-  };
+console.log({tasks});
+
 
   return (
-    <div>DashboardPage</div>
+    <div className="">
+
+     <DataTable columns={columns} data={tasks.data} /> 
+      
+    </div>
     
     // <div className="grid grid-cols-5 min-h-screen">
-    //   <AppSidebar />
     //   <div className="col-span-4 p-6">
     //     <div className="mb-4">
     //       <input
