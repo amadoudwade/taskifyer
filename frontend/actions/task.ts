@@ -78,6 +78,8 @@ export const handleUpdateFormTask = async (state: any, formData: FormData) => {
     const taskId = formData.get('taskId')
     
     try {
+        const currentUser = await verifySession()
+        
         const formField = formSchema.safeParse({
             title: formData.get('title'),
             description: formData.get('description'),
@@ -94,8 +96,8 @@ export const handleUpdateFormTask = async (state: any, formData: FormData) => {
         }
 
         const { title, description, status, priority, deadline } = formField.data
-    
-        await axios.put(`${TASK_URL}/${taskId}`,
+        // ${TASK_URL}/${user._id}/tasks
+        await axios.put(`${TASK_URL}/${currentUser._id}/tasks/${taskId}`,
             {
                 title,
                 description,
@@ -116,15 +118,15 @@ export const handleUpdateFormTask = async (state: any, formData: FormData) => {
         return { type: 'error', message: error?.response?.data?.error?.errorResponse.errmsg }
         
     }
-    revalidatePath('/dashboard/')
+    revalidatePath('/dashboard/tasks')
     return { type: 'success', message: "Update success!" }
     
 }
 
 export const handleDeleteFormTask = async (id: string) => {
     try {
-        
-        await axios.delete(`${TASK_URL}/${id}`,
+        const currentUser = await verifySession()
+        await axios.delete(`${TASK_URL}/${currentUser._id}/tasks/${id}`,
             {
                 headers:{
                     Authorization: `${cookies().get('token')?.value}`
@@ -140,15 +142,14 @@ export const handleDeleteFormTask = async (id: string) => {
 
 export const handleCreateFormTask = async (state: any, formData: FormData) => {
     try {
-        // Vérification de la session utilisateur
-        const currentUser = await verifySession();
+        const currentUser = await verifySession()
         console.log({currentUser});
         
         if (!currentUser) {
             return { type: "error", message: "Utilisateur non authentifié." };
         }
-
-        const user = currentUser._Id
+        console.log(formData);
+        
         // Validation des champs du formulaire
         const formField = formSchema.safeParse({
             title: formData.get("title"),
@@ -163,11 +164,12 @@ export const handleCreateFormTask = async (state: any, formData: FormData) => {
         }
 
         const { title, description, status, priority, deadline } = formField.data;
-
+        
+        
         // Création de la tâche via l'API
         const response = await axios.post(
-            TASK_URL,
-            { title, description, status, priority, deadline, user },
+            `${TASK_URL}/${currentUser._id}/tasks`,
+            { title, description, status, priority, deadline, user: currentUser._id },
             {
                 headers: {
                     Authorization: `Bearer ${cookies().get("token")?.value}`,
@@ -182,7 +184,9 @@ export const handleCreateFormTask = async (state: any, formData: FormData) => {
 
         return { type: "success", message: "Tâche créée avec succès !" };
     } catch (error: any) {
-        console.error("Erreur lors de la création de la tâche :", error);
+        // console.log(error);
+        
+        // console.error("Erreur lors de la création de la tâche :", error);
 
         // Gérer les erreurs provenant de l'API
         if (error.response) {

@@ -4,54 +4,6 @@ import axios from "axios";
 import { cookies } from "next/headers"
 
 
-// export const verifySession = async () => {
-    
-//     try {
-//         const session = cookies().get('token')
-
-//         if (!session) {
-//             return null
-//         }
-
-//         const currentUser = await axios.get(`http://localhost:8000/api/auth/verify/${session.value}`)
-        
-//         if (!currentUser) {
-//             return null
-//         }
-//         return currentUser.data
-        
-//     } catch (error) {
-//         return null
-
-//     }
-
-// }
-
-// export const verifySession = async () =>  {
-
-//     try {
-        
-//         const UserInfo = await axios.get('http://localhost:8000/api/auth/verify/',
-//             {
-//                 headers: {
-//                     Authorization: `${cookies().get('token')?.value}`
-//                 }
-//             }
-//         )        
-
-//         if (!UserInfo) {
-//             return null
-//         }
-
-//         return UserInfo.data
-
-//     } catch (error : any) {
-        
-//         return null
-//     }
-// }
-
-
 export const verifySession = async () => {
     try {
         // Récupération du token depuis les cookies
@@ -74,11 +26,9 @@ export const verifySession = async () => {
             console.warn("Statut de réponse inattendu :", response.status);
             return null;
         }
-
-        
         
         // Retourne les données utilisateur si tout est correct
-        return response.data;
+        return response.data
     } catch (error: any) {
 
         

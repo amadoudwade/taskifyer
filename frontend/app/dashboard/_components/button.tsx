@@ -5,13 +5,13 @@ import Link from "next/link"
 
 export const CreateTask = () => {
     return(
-        <Button> <Link href={'/dashboard/tasks/create'}>Ajouter une tâche</Link></Button>
+        <Button className="w-36 ml-6 bg-amber-200"> <Link href={'/dashboard/tasks/create'}>Ajouter une tâche</Link></Button>
     )
 }
 
 export const UpdateTask = ({ id }: {id: string}) => {
     return(
-        <Button variant={"secondary"}> <Link href={`/dashboard/tasks/${id}`}>Update</Link></Button>
+        <Button variant={"secondary"} className="bg-amber-200 hover:bg-primary"> <Link href={`/dashboard/tasks/${id}`}>Update</Link></Button>
     )
 }
 

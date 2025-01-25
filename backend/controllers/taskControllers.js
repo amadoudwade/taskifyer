@@ -2,46 +2,47 @@ import { Tasks } from "../models/task.js";
 
 
 //add new task
-export const AddTask = (req, res, next) => {
-
-    // Validate and construct the task object
-    const task = new Tasks({
+export const AddTask = async (req, res, next) => {
+    const userId = req.params.userId
+    console.log({userId});
+    
+    try {
+      // Créer et valider l'objet tâche
+      const task = new Tasks({
         title: req.body.title,
         description: req.body.description,
         status: req.body.status,
         priority: req.body.priority,
         deadline: req.body.deadline,
-        user: req.body.user
-        // user: req.user.id,
-    });
-
-    // Save the task to the database
-    task.save()
-        .then(() => 
-            res.status(201).json({
-                message: "New task added successfully!",
-            })
-        )
-        .catch(
-            
-            (err) => 
-            res.status(400).json({
-                error: err.message, // Provide the error message for better debugging
-            })
-            
-            
-        );
-};
+        user: userId,
+      });
+  
+      // Sauvegarder la tâche dans la base de données
+      await task.save();
+  
+      // Répondre avec un message de succès
+      res.status(201).json({
+        message: "New task added successfully!",
+      });
+    } catch (err) {
+      console.log({err});
+      
+      res.status(400).json({
+        error: err.message || "Failed to add task. Please try again.",
+      });
+    }
+  };
+  
 
 //get all tasks
 export const getAllTasks = async (req, res, next) => {
-    console.log({params: req.params});
+    // console.log({params: req.params});
     
     const userId = req.params.userId
 
     try {
 
-        const tasks = await Tasks.find({user: userId}).sort({createdAt:'desc'})
+        const tasks = await Tasks.find({user: userId}).select("-user.password").sort({createdAt:'desc'})
 
         return res.json(tasks)
 

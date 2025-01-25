@@ -24,7 +24,7 @@ export const UpdateTaskForm = ({task}: { task : Task }) => {
     useEffect(() => {
         if (state?.type === 'success') {
             toast.success(state.message)
-            router.push('/dashboard/tasks')
+            router.push('/dashboard')
         }
 
         if (state?.type === 'error') {

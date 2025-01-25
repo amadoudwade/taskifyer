@@ -4,24 +4,31 @@ import React from 'react'
 import { columns } from './_components/columns'
 import { DataTable } from './_components/data-table'
 import { verifySession } from '@/lib/auth'
-
-
+import { TaskCard } from './_components/task-card'
+import { CreateTask } from './_components/button'
 
 const DashboardPage = async () => {
 
   const user = await verifySession()
 
-const tasks = await axios.get(`${TASK_URL}/${user._id}/tasks`)
-
-
-console.log({tasks});
-
+  const tasks = await axios.get(`${TASK_URL}/${user._id}/tasks`)
+  
+  
+const TASK = tasks.data
 
   return (
-    <div className="">
 
-     <DataTable columns={columns} data={tasks.data} /> 
+    <div className='flex flex-col gap-4'>
+      <div className='-mx-6'>
+        <CreateTask/>
+      </div>
+      <div className="grid grid-cols-3 gap-8">
+     {TASK.map((task) => 
+    <TaskCard key={task.id} {...task}/>
+    )}
+     {/* <DataTable columns={columns} data={tasks.data} />  */}
       
+    </div>
     </div>
     
     // <div className="grid grid-cols-5 min-h-screen">

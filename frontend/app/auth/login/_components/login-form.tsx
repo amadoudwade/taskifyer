@@ -50,12 +50,12 @@ export function LoginForm({
               <div className="grid gap-2">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
-                  <a
+                  {/* <a
                     href="#"
                     className="ml-auto text-sm underline-offset-2 hover:underline"
                   >
                     Forgot your password?
-                  </a>
+                  </a> */}
                 </div>
                 <Input id="password"
                  name='password'
@@ -72,18 +72,18 @@ export function LoginForm({
               
               <div className="text-center text-sm">
                 Don&apos;t have an account?{" "}
-                <a href="#" className="underline underline-offset-4">
+                <a href="/auth/register" className="underline underline-offset-4">
                   Sign up
                 </a>
               </div>
             </div>
           </form>
           <div className="relative hidden bg-muted md:block">
-            <img
+            {/* <img
               src=""
               alt="Image"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
-            />
+            /> */}
           </div>
         </CardContent>
       </Card>

@@ -6,18 +6,9 @@ import { cookies } from 'next/headers'
 
 const CreatePage = async () => {
   
-  const user = await axios.get( TASK_URL,
-    {
-        headers:{
-            Authorization: `${cookies().get('token')?.value}`
-        }
-    }) 
-  if (!user.data) {
-      return { message: 'Error'}
-  }
   return (
-    <div>
-      <CreateTaskForm />
+    <div className='flex justify-center items-center h-full'>
+      <CreateTaskForm/>
 
     </div>
   )

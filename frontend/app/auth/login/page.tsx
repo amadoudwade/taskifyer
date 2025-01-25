@@ -13,7 +13,9 @@ const LoginPage = async () => {
   
 
   return (
-    <div><LoginForm/></div>
+      <div>
+      <LoginForm/>
+      </div>
   )
 }
 
